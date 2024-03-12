@@ -1,0 +1,49 @@
+@startuml
+' https://plantuml.com/sequence-diagram
+
+title __Producer-Consumer Model__
+
+autonumber
+
+' General Formatting
+skinparam responseMessageBelowArrow true
+skinparam lifelineStrategy solid
+hide footbox
+
+' Protocol Participants
+box System
+  database      CommandsSource          as cs       order 5
+  entity        Producer                as p        order 10
+  queue         RabbitMQ                as rq       order 40
+  entity        Consumer                as c        order 70
+  database      OrderedMap              as om       order 130
+end box
+
+' Protocol Context & Assumptions
+/ note over om
+  In-Memory store
+end note
+/ note over cs
+  Pre-generated file
+end note
+/ note over c
+  Server
+end note
+/ note over p
+  Client
+end note
+
+
+' Protocol
+
+cs <-> p : Producer reads the commands
+p -> rq : Commands are sent to the queue
+loop
+ rq <-> c : Consumer listens for commands
+ c->om : Processes get, add, delete, getAll
+end
+
+|||
+== Protocol Continues Indefinitely ==
+@enduml
+

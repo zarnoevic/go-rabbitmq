@@ -1,0 +1,12 @@
+example.env
+a
+*.puml
+*.png
+*.md
+.github
+.idea
+.gitignore
+docker/
+server_exec
+client_exec
+*.yaml

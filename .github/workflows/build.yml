@@ -1,0 +1,41 @@
+name: build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.22'
+
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v2
+
+      - name: Build the client
+        run: |
+          cd src/cmd/client
+          go build -o clientexec
+
+      - name: Check if client executable was created
+        run: |
+          ls src/cmd/client/clientexec
+
+      - name: Build the consumerService
+        run: |
+          cd src/cmd/server
+          go build -o serverexec
+
+      - name: Check if consumerService executable was created
+        run: |
+          ls src/cmd/server/serverexec
